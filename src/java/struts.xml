@@ -1,0 +1,260 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <constant name="struts.multipart.maxSize" value="10000000" />
+    <package name="default" extends="struts-default, json-default"  namespace="/">
+        <action name="">
+            <result type="redirectAction">home</result>
+        </action>
+        <action name="home"  class="Controller.HomepageAction">
+            <result name="success">homepage.jsp</result>
+        </action>
+        <action name="login" class="Controller.LoginAction">
+            <result name="success" type="redirectAction">home</result>
+            <result name="fail">login.jsp</result>  
+        </action>      
+        <action name="logout" class="Controller.LogoutAction">
+            <result name="success" type="redirectAction">home</result>
+        </action>
+        <action name="register" class="Controller.RegisterAction">
+            <result name="success" type="chain">login</result>
+            <result name="fail">register.jsp</result>
+        </action>
+        <action name="searchTour" class="Controller.SearchTourAction">
+            <result name="success">search-tour.jsp</result>            
+            <result name ="input">search-tour.jsp</result>
+        </action>   
+        <action name="viewTour" class="Controller.ViewTourAction">
+            <result name="success">tour-detail.jsp</result>
+            <result name="fail">404.jsp</result>
+        </action>        
+        <action name="addToCart" class="Controller.AddToCartAction">
+            <result name="success">cart.jsp</result>
+            <result name="fail" type="redirectAction">
+                <param name ="actionName">viewTour</param>
+                <param name="msg">${msg}</param>
+                <param name="id">${id}</param>
+            </result>
+        </action>
+        <action name="removeItem" class="Controller.RemoveItemAction">
+            <result name="success">cart.jsp</result>
+        </action>
+        <action name="updateProfile" class="Controller.UpdateProfileAction">
+            <result name="success">profile.jsp</result>
+            <result name="fail">profile.jsp</result>
+        </action>
+        <action name="updatePassword" class="Controller.UpdatePasswordAction">
+            <result name="success">profile.jsp</result>
+            <result name="fail">profile.jsp</result>
+        </action>      
+        <action name="updateCart" class="Controller.UpdateCartAction">
+            <result name="success" type="chain">
+                viewTour
+            </result>
+        </action>
+        <action name="addTour" class="Controller.NewTourAction">
+            <result name="success">add-tour.jsp</result>
+        </action>
+        <action name="newLocation" class="Controller.NewLocationAction">
+            <result name="new">add-location.jsp</result>
+            <result name="edit">edit-location.jsp</result>
+        </action>
+        <action name="addLocation" class="Controller.AddLocationAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">newLocation</param>
+                <param name="msg">${msg}</param>
+            </result>
+        </action>
+        <action name="updateLocation" class="Controller.UpdateLocationAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewLoc</param>
+                <param name="page">${page}</param>
+            </result>
+            <result name="fail" type="redirectAction">
+                <param name="actionName">newLocation</param>
+                <param name="id">${locId}</param>
+            </result>
+        </action>
+        <action name="uploadImage" class="Controller.FileUploadAction">           
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="fileUpload">
+                <param name="maximumSize">4194303</param>
+                <param name="allowedTypes">image/jpeg,image/png</param>
+            </interceptor-ref> 
+            <interceptor-ref name="validation"/>
+            <interceptor-ref name="workflow"/>
+            <result name="success">upload-image.jsp</result>
+            <result name="input">upload-image.jsp</result>
+        </action>
+        <action name="saveTour" class="Controller.AddTourAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">addTour</param>
+                <param name="msg">${msg}</param>
+            </result>           
+        </action>
+        <action name="editTour" class="Controller.EditTourAction">
+            <result name="success">edit-tour.jsp</result>
+            <result name="fail">404.jsp</result>
+        </action>
+        <action name="editTourDate" class="Controller.EditTourDateAction">
+            <result name="success">edit-tourdate.jsp</result>
+            <result name="fail">404.jsp</result>
+        </action>
+        <action name="updateTour" class="Controller.UpdateTourInfoAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">manageTour</param>
+                <param name="page">${page}</param>
+            </result>   
+            <result name="fail" type="chain">editTour</result>   
+        </action>
+          <action name="updateDate" class="Controller.UpdateDateAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewDate</param>
+                <param name="page">${page}</param>
+                <param name="tourId">${tourId}</param>
+                <param name="msg">${msg}</param>
+            </result>   
+            <result name="fail" type="chain">editTourDate</result>   
+        </action>
+        <action name="checkout" class="Controller.CheckOutAction">
+            <result name="success">confirm.jsp</result>
+            <result name="fail">cart.jsp</result>
+            <result name="login">login.jsp</result>
+        </action>
+        <action name="viewUser" class="Controller.ViewUserAction">
+            <result name="success">view-user.jsp</result>
+        </action>
+        <action name="viewLoc" class="Controller.ManageLocationAction">
+            <result name="success">view-loc.jsp</result>
+        </action>
+        <action name="viewImage" class="Controller.ViewImageAction">
+            <result name="success">image-list.jsp</result>
+        </action>
+        <action name="addImage" class="Controller.AddImageAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewImage</param>
+                <param name="tourId">${tourId}</param>
+                <param name="msg">${msg}</param>
+            </result>
+        </action>
+        <action name="removeImage" class="Controller.RemoveImageAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewImage</param>
+                <param name="tourId">${tourId}</param>
+                <param name="msg">${msg}</param>
+            </result>
+        </action>
+        <action name="removeLocation" class="Controller.RemoveLocationAction">
+            <result  name="success" type="redirectAction">
+                <param name="actionName">viewLoc</param>
+                <param name="page">${page}</param>
+                <param name="msg">${msg}</param>
+            </result>
+        </action>
+        <action name="removeTour" class="Controller.RemoveTourInfoAction">
+            <result  name="success" type="redirectAction">
+                <param name="actionName">manageTour</param>
+                <param name="page">${page}</param>
+                <param name="msg">${msg}</param>
+            </result>
+        </action>
+          <action name="removeTourDate" class="Controller.RemoveTourDateAction">
+            <result  name="success" type="redirectAction">
+                <param name="actionName">viewDate</param>
+                <param name="page">${page}</param>
+                <param name="msg">${msg}</param>
+                <param name="tourId">%{tourId}</param>
+            </result>
+        </action>
+         <action name="removeDesc" class="Controller.RemoveDescAction">
+            <result  name="success" type="redirectAction">
+                <param name="actionName">viewDay</param>
+                <param name="id">%{id}</param>
+                <param name="msg">%{msg}</param>
+            </result>
+        </action>
+        <action name="addDesc" class="Controller.AddDescAction">
+            <result  name="success" type="redirectAction">
+                <param name="actionName">viewDay</param>
+                <param name="id">${id}</param>
+                <param name="msg">${msg}</param>
+            </result>
+        </action>
+          <action name="updateDesc" class="Controller.UpdateDescAction">
+            <result  name="success" type="redirectAction">
+                <param name="actionName">viewDay</param>
+                <param name="id">${id}</param>
+                <param name="msg">%{msg}</param>
+            </result>
+        </action>
+        <action name="manageTour" class="Controller.TourManagerAction">
+            <result name="success">view-tour.jsp</result>
+        </action>
+        <action name="setDate" class="Controller.TourDateAction">
+            <result name="success">set-time.jsp</result>
+        </action>
+               <action name="viewDate" class="Controller.ViewDateAction">
+            <result name="success">view-date.jsp</result>
+        </action>
+           <action name="viewDay" class="Controller.ViewDayAction">
+            <result name="success">view-day.jsp</result>
+        </action>
+        <action name="addDate" class="Controller.SaveDateAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">setDate</param>
+                <param name="msg">${msg}</param>
+            </result>
+        </action>
+        <action name="banUser" class="Controller.BanUserAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewUser</param>
+                <param name="page">${page}</param>
+            </result>
+        </action>
+        <action name="restoreUser" class="Controller.RestoreUserAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewUser</param>
+                <param name="page">${page}</param>
+            </result>
+        </action>
+        <action name="updateImage" class="Controller.UpdateImageAction">
+            <result  name="success" type="redirectAction">
+                <param name="actionName">viewImage</param>
+                <param name="tourId">${tourId}</param>
+                <param name="msg">${msg}</param>
+            </result>
+        </action>
+        <action name="getLocation" class="Controller.GetLocationAction">
+            <result  type="json">
+                <param name="root">locList</param>
+            </result>
+        </action>
+        <action name="getTourDetail" class="Controller.GetDetailAction">
+            <result  type="json">
+                <param name="root">detail</param>
+            </result>
+        </action>
+        <action name="getImageList" class="Controller.LoadImageAction">
+            <result  type="json">
+                <param name="root">imageList</param>
+            </result>
+        </action>
+        <action name="checkPhone" class="Controller.CheckPhoneAction">
+            <result  type="json">
+                <param name="root">msg</param>
+            </result>
+        </action>
+        <action name="checkPassword" class="Controller.CheckPasswordAction">
+            <result  type="json">
+                <param name="root">check</param>
+            </result>
+        </action>
+        <action name="checkEmail" class="Controller.CheckEmailAction">
+            <result  type="json">
+                <param name="root">check</param>
+            </result>
+        </action>
+    </package>
+</struts>
